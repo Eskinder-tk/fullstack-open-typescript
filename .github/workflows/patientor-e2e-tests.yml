@@ -2,7 +2,7 @@ name: Patientor E2E Tests
 
 on:
   push:
-    branches: [ xmain, xmaster ]
+    branches: [ main, master ]
 
 jobs:
   test:
@@ -10,50 +10,39 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v6
+      uses: actions/checkout@v4
 
     - name: Setup Node.js
-      uses: actions/setup-node@v5
+      uses: actions/setup-node@v4
       with:
         node-version: '24'
+        cache: 'npm'
 
-    - name: Install patientor backend dependencies
+    - name: Install backend dependencies
       working-directory: ./patientor/backend
       run: npm install --legacy-peer-deps
 
-    - name: Start patientor backend
-      working-directory: ./patientor/backend
-      run: npm start &
-
-    - name: Install patientor frontend dependencies
+    - name: Install & build frontend
       working-directory: ./patientor/frontend
-      run: npm install --legacy-peer-deps
+      run: |
+        npm install --legacy-peer-deps
+        npm run build
 
-    - name: Build patientor frontend
-      working-directory: ./patientor/frontend
-      run: npm run build
-
-    - name: Start patientor frontend preview
-      working-directory: ./patientor/frontend
-      run: npx vite preview --port 5173 &
-
-    - name: Install e2e test dependencies
+    - name: Install E2E test dependencies & browsers
       working-directory: ./patientor-tests
-      run: npm install 
+      run: |
+        npm install
+        npx playwright install --with-deps chromium
 
-    - name: Install Playwright browsers
-      working-directory: ./patientor-tests
-      run: npx playwright install --with-deps chromium
-
-    - name: Wait for servers to start
-      run: npx wait-on http://localhost:3001/api/ping http://localhost:5173 --timeout 60000
-
-    - name: Run E2E tests
-      working-directory: ./patientor-tests
-      run: npm test
+    - name: Start servers and run tests
+      run: |
+        cd patientor/backend && npm start &
+        cd patientor/frontend && npx vite preview --port 5173 &
+        npx wait-on http://localhost:3001/api/ping http://localhost:5173 --timeout 60000
+        cd patientor-tests && npm test
 
     - name: Upload test report
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: playwright-report

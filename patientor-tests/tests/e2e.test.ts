@@ -64,6 +64,11 @@ test.describe('Adding an entry to a patient', () => {
     await expect(page).toHaveURL(/\/patients\/.+/);
 
     await page.getByRole('button', { name: 'Add New Entry' }).click();
+    await page.getByLabel('Entry Type').click();
+    // Alternative using role: await page.getByRole('combobox', { name: 'Age' }).click();
+
+    // 2. Click the desired option in the portal overlay
+    await page.getByRole('option', { name: 'Health Check' }).click();
 
     await page.getByLabel('Date').fill('2024-03-15');
     await page.getByLabel('Description').fill('Annual checkup, all clear');
