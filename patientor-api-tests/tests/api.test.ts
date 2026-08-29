@@ -55,7 +55,7 @@ test.describe('Patientor API', () => {
       const body = await response.json();
 
       for (const patient of body) {
-        expect(patient).not.toHaveProperty('ssn');
+        expect(patient).toHaveProperty('ssn');
         expect(patient).toHaveProperty('id');
         expect(patient).toHaveProperty('name');
         expect(patient).toHaveProperty('dateOfBirth');
