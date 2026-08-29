@@ -7,7 +7,6 @@ import EntryDetails from './EntryDetails';
 import patientService from '../../services/patients';
 import React, { Dispatch, SetStateAction } from 'react';
 
-
 interface props {
     patients: Patient[];
     diagnoses: Diagnosis[];
@@ -244,7 +243,7 @@ const PatientDetail = ({patients, diagnoses, setPatients}: props ) => {
         if (type === "Hospital") {
             return (
                 <Stack spacing={2}>
-                    <TextField label="dischargeDate" type="date"  value={dischargeDate} onChange={(e) => setDischargeDate(e.target.value)}  />
+                    <TextField label="dischargeDate" type="date" slotProps={{ inputLabel: { shrink: true } }}  value={dischargeDate} onChange={(e) => setDischargeDate(e.target.value)}  />
                     <TextField label="Discharge-Criteria" value={dischargeCriteria} onChange={(e) => setDischargeCriteria(e.target.value)}/>
                     <Button variant="contained" onClick={handleHospitalSubmit}>Add</Button>
                     <Button variant="outlined" onClick={onCancel}>Cancel</Button>
@@ -261,8 +260,8 @@ const PatientDetail = ({patients, diagnoses, setPatients}: props ) => {
             <Stack spacing={2}>
                 <TextField label="emplayer-name" value={employerName} onChange={(e) => setEmployerName(e.target.value)}/>
                 
-                    <TextField label="startDate"  value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-                    <TextField label="endDate" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+                    <TextField type="date" label="startDate" slotProps={{ inputLabel: { shrink: true } }}  value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+                    <TextField type="date" label="endDate" slotProps={{ inputLabel: { shrink: true } }} value={endDate} onChange={(e) => setEndDate(e.target.value)} />
                 <Button variant="contained" onClick={handleOccupationalSubmit}>Add</Button>
                 <Button variant="outlined" onClick={onCancel}>Cancel</Button>
             </Stack>
@@ -335,7 +334,7 @@ const PatientDetail = ({patients, diagnoses, setPatients}: props ) => {
                     </div>
                     <div>
                         {patient.entries.map(e => (
-                            <EntryDetails entries={e}/>
+                            <EntryDetails key={e.id} entries={e}/>
                         ))}
                         
                     </div>
@@ -346,7 +345,7 @@ const PatientDetail = ({patients, diagnoses, setPatients}: props ) => {
                                 <h3>New {typeName()} Entry</h3>
                                 {notifyMessage()}
                                 <FormControl fullWidth>
-                                    <InputLabel id="demo-simple-select-label">Entry Type</InputLabel>
+                                    <InputLabel id="demo-simple-select-label">Entry Type*</InputLabel>
                                     <Select
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
@@ -360,10 +359,10 @@ const PatientDetail = ({patients, diagnoses, setPatients}: props ) => {
                                     </Select>
                                 </FormControl>
 
-                                <TextField label="Date" value={date} onChange={(e) => setDate(e.target.value)} />
+                                <TextField type="date" label="Date*" slotProps={{ inputLabel: { shrink: true } }} value={date} onChange={(e) => setDate(e.target.value)} />
                             
-                            <TextField label="description" value={description} onChange={(e) => setDescription(e.target.value)}/>
-                                <TextField label="specialist" value={specialist} onChange={(e) => SetSpecialist(e.target.value)}/>
+                            <TextField label="description*" value={description} onChange={(e) => setDescription(e.target.value)}/>
+                                <TextField label="specialist*" value={specialist} onChange={(e) => SetSpecialist(e.target.value)}/>
                                 <FormControl >
                                     <InputLabel >Chip</InputLabel>
                                     <Select
