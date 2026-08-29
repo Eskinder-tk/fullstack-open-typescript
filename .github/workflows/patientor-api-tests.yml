@@ -41,7 +41,7 @@ jobs:
       working-directory: ./patientor-api-tests
       run: |
         npm start --prefix ../patientor/backend &
-        npx wait-on http://127.0.0.1:3001
+        npx wait-on http-get://127.0.0.1:3001/api/ping
         npm test
 
     - name: Upload test report
